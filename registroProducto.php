@@ -1,5 +1,9 @@
 <?php 
 
+session_start();
+if (isset($_SESSION['usuario'])){
+} else {header('Location: index.html'); die();}
+
 
 if (!empty($_POST['producto_nombre']) && !empty($_POST['producto_cantidad']) && !empty($_POST['producto_precio'])){
 

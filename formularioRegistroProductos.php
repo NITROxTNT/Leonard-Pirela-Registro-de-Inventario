@@ -1,10 +1,10 @@
 <?php     
-    session_start();
+   /* session_start();
     if (isset($_SESSION['usuario'])){
         $nombreUsuario = $_SESSION['usuario'];
         echo "<h1>$nombreUsuario</h1><hr><br>";
-    } else {header('Location: index.html'); die();}
-    ?>
+    } else {header('Location: index.html'); die();} */
+?>
 
 
 <!DOCTYPE html>
@@ -82,7 +82,7 @@
                             var tabla = document.getElementById("tablaUsuarios");
                             tabla.setAttribute("border","2");
                             
-                            tabla.innerHTML = "<tr><th>ID Producto</th><th>Nombre del Producto</th><th>Precio del Producto</th><th>Cantidad</th></tr>";
+                            tabla.innerHTML = "<tr><th>ID Producto</th><th>Nombre del Producto</th><th>Precio del Producto</th><th>Cantidad</th><th>Modificar Cantidad</th></tr>";
 
                             respuestaJson.forEach(usuario => {
 
@@ -102,10 +102,47 @@
                             cedula.appendChild(textoCelda);
                             fila.appendChild(cedula);
 
-                            var trabajo = document.createElement("td"); 
+                            trabajo = document.createElement("td"); 
                             var textoCelda = document.createTextNode(usuario['producto_cantidad']);
                             trabajo.appendChild(textoCelda);
                             fila.appendChild(trabajo);
+
+                            var botonModificar = document.createElement("button");
+                            botonModificar.textContent = "Modificar";
+                            botonModificar.value = usuario['producto_id'];
+                            fila.appendChild(botonModificar);
+
+                            var modificar = document.createElement("input");
+                            modificar.type = "number";
+                            fila.appendChild(modificar);
+
+                            
+                            botonModificar.onclick = function () {
+                                
+                                var filaBoton = this.parentElement;
+                                var nuevaCantidad = filaBoton.lastElementChild;
+                                //alert(nuevaCantidad.value);
+
+            var solicitudHttp = new XMLHttpRequest ();
+            solicitudHttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    if (this.response != ""){
+                        
+                        alert(JSON.parse(this.response));
+                        if (JSON.parse(this.response) == "Cantidad Cambiada") {
+                            visualizarProductos();
+                        } else {alert("No se pudo modificar la cantidad");}
+                    }
+                }
+            }
+
+            var datos = new FormData ();
+            datos.append("producto_cantidad", nuevaCantidad.value);
+            datos.append("producto_id", this.value)
+            solicitudHttp.open("POST", "modificarCantidad.php");
+            solicitudHttp.send(datos);
+
+                            }
 
                             tabla.appendChild(fila);
 
