@@ -112,6 +112,11 @@
                             botonModificar.value = usuario['producto_id'];
                             fila.appendChild(botonModificar);
 
+                            var botonEliminar = document.createElement("button");
+                            botonEliminar.textContent = "Eliminar";
+                            botonEliminar.value = usuario['producto_id'];
+                            fila.appendChild(botonEliminar);
+
                             var modificar = document.createElement("input");
                             modificar.type = "number";
                             fila.appendChild(modificar);
@@ -143,6 +148,30 @@
             solicitudHttp.send(datos);
 
                             }
+
+
+            botonEliminar.onclick = function () {
+
+            var solicitudHttp = new XMLHttpRequest ();
+            solicitudHttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    if (this.response != ""){
+                        console.log(this.response);
+                        alert(JSON.parse(this.response));
+                        if (JSON.parse(this.response) == "Producto Eliminado") {
+                            visualizarProductos();
+                        } else {alert("No se pudo eliminar el producto");}
+                    }
+                }
+            }
+
+            var datos = new FormData ();
+            datos.append("producto_id", this.value)
+            solicitudHttp.open("POST", "eliminarProducto.php");
+            solicitudHttp.send(datos);
+
+                            }
+
 
                             tabla.appendChild(fila);
 
