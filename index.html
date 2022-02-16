@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h1 id="titulo">Inicio de Sesión</h1>
+</hr>
+
+<div id="contenido">
+<form method="post" onsubmit="return false;" id="formulario">
+<label for="usuario_nombre">Nombre de Usuario:</label><br>
+<input type="text" id="usuario_nombre" name="usuario_nombre"><br>
+<br>
+<label for="usuario_password">Contraseña de Usuario:</label><br>
+<input type="password" id="usuario_password" name="usuario_password"> 
+
+<br><br>
+<button onclick="inicioSesion();">Iniciar Sesión</button>
+<button onclick="registrarse();">Registrarse</button>
+</form>
+</div>
+
+<script type="text/javascript">
+    function registrarse(){
+        window.location.href = "registroUsuario.html";
+    };
+</script>
+
+<script type="text/javascript">
+    function inicioSesion (usuario_nombre , usuario_password){
+        
+        var solicitudHttp = new XMLHttpRequest ();
+            solicitudHttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    if (this.response != ""){
+                        console.log(this.response);
+                        if (JSON.parse(this.response) == 0 ) {alert("Inicio de Sesion Fallido, pruebe nuevamente"); document.getElementById("formulario").reset();}
+                        else {
+                            alert("Inicio de Sesion Completado");
+                            console.log(JSON.parse(this.response))
+                            window.location.href = "formularioRegistroProductos.php";
+                        }
+                    }
+                }
+            }
+
+            var formularioDatos = new FormData (document.getElementById("formulario"));
+            solicitudHttp.open("POST", "inicioSesion.php");
+            solicitudHttp.send(formularioDatos);
+
+    }
+</script>
+
+
+</body>
+</html>

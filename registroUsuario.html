@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h1>Registro de Usuarios</h1>
+    </hr>
+
+    <div>
+        <form method="post" onsubmit="return false;" id="formulario">
+        <label for="usuario_nombre">Nombre de Usuario:</label><br>
+        <input type="text" id="usuario_nombre" name="usuario_nombre"><br>
+        <br>
+        <label for="usuario_password">Contraseña de Usuario:</label><br>
+        <input type="password" id="usuario_password" name="usuario_password"> 
+        
+        <br><br>
+        <button onclick="registrarse();">Registrarse</button>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        function registrarse(){
+            
+            var solicitudHttp = new XMLHttpRequest ();
+            solicitudHttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    if (this.response != ""){
+                        
+                        alert(JSON.parse(this.response));
+                        if (JSON.parse(this.response) == "Registro Completado") {
+                            window.location.href = "index.html";
+                        }
+                        else {
+                             document.getElementById("formulario").reset();
+                        }
+                    }
+                }
+            }
+
+            var formularioDatos = new FormData (document.getElementById("formulario"));
+            solicitudHttp.open("POST", "registroUsuario.php");
+            solicitudHttp.send(formularioDatos);
+            
+        };
+    </script>
+
+</body>
+</html>
